@@ -17,16 +17,21 @@ let insertAllData = function(newData) {
 
         let collection = db.collection('news')
 
+        let newUrls = []
+        newData.forEach(newRow => {
+            newUrls.push(newRow.url)
+        })
+
         let insertData = []
-        collection.find({}).toArray(function(error, currentData) {
+        collection.find({url: {$in: newUrls}}).toArray(function(error, existingData) {
             if (error) {
                 console.log(error)
             }
 
             newData.forEach(newRow => {
                 let found = false
-                currentData.forEach(currentRow => {
-                    if (currentRow.url === newRow.url) {
+                existingData.forEach(existingRow => {
+                    if (existingRow.url === newRow.url) {
                         found = true
                     }
                 })
@@ -42,11 +47,13 @@ let insertAllData = function(newData) {
                     if (error) {
                         console.log(error)
                     }
+
                     db.close()
                     console.log(insertDataCount)
                 })
             } else {
                 db.close()
+                console.log(insertDataCount)
             }
         })
     })
