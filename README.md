@@ -9,7 +9,7 @@ Yle uutiset link crawler
 
 # TODO
 
-* clean callback hell (promises?)
+* make own object/class for mongo
 * cronjob
 * show the 1000 newest news in web page
 * support other categories (talous)
