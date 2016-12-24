@@ -36,12 +36,14 @@ let insertAllData = function(newData) {
                 }
             })
 
-            if (insertData.length > 0) {
+            const insertDataCount = insertData.length
+            if (insertDataCount > 0) {
                 collection.insertMany(insertData, function(error, result) {
                     if (error) {
                         console.log(error)
                     }
                     db.close()
+                    console.log(insertDataCount)
                 })
             } else {
                 db.close()
