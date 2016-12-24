@@ -63,7 +63,7 @@ request(yleUlkomaatUrl, function (error, response, body) {
     if (!error && response.statusCode == 200) {
         const $ = cheerio.load(body)
         let data = []
-        $('article').each((index, elem) => {
+        $('section.yle__newsList__sectionList__section').find('article').each((index, elem) => {
             const newsUrl = $(elem).find('a').attr('href')
             const title = $(elem).find('h1').text()
             const newsAddedRaw = $(elem).find('time').attr('datetime')

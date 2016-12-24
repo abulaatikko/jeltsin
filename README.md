@@ -9,7 +9,6 @@ Yle uutiset link crawler
 
 # TODO
 
-* fetch only ulkomaa news, not sidebar
 * clean callback hell (promises?)
 * cronjob
 * show the 1000 newest news in web page
