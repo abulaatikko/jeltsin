@@ -9,7 +9,7 @@ const yleUlkomaatUrl = 'http://yle.fi/uutiset/18-34953'
 const rootUrl = 'http://yle.fi'
 const mongoUrl = 'mongodb://localhost:27017/jeltsin'
 
-let insertAllData = function(newData) {
+const insertAllData = function(newData) {
     mongoClient.connect(mongoUrl, function(error, db) {
         if (error) {
             console.log(error)
@@ -60,21 +60,23 @@ let insertAllData = function(newData) {
 }
 
 request(yleUlkomaatUrl, function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-        const $ = cheerio.load(body)
-        let data = []
-        $('section.yle__newsList__sectionList__section').find('article').each((index, elem) => {
-            const newsUrl = $(elem).find('a').attr('href')
-            const title = $(elem).find('h1').text()
-            const newsAddedRaw = $(elem).find('time').attr('datetime')
-            data.push({
-                url: rootUrl + newsUrl,
-                title: title,
-                added: moment(newsAddedRaw).toISOString(),
-                created: moment().toISOString(),
-            })
-        })
-
-        insertAllData(data)
+    if (error || response.statusCode != 200) {
+        console.log(error)
     }
+
+    const $ = cheerio.load(body)
+    let data = []
+    $('section.yle__newsList__sectionList__section').find('article').each((index, elem) => {
+        const newsUrl = $(elem).find('a').attr('href')
+        const title = $(elem).find('h1').text()
+        const newsAddedRaw = $(elem).find('time').attr('datetime')
+        data.push({
+            url: rootUrl + newsUrl,
+            title: title,
+            added: moment(newsAddedRaw).toISOString(),
+            created: moment().toISOString(),
+        })
+    })
+
+    insertAllData(data)
 })
