@@ -11,5 +11,4 @@ Yle uutiset link crawler
 ## TODO
 
 * make own object/class for mongo
-* cronjob
 * show the 1000 newest news in web page

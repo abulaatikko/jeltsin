@@ -1,6 +1,6 @@
 {
   "name": "jeltsin.pulu.org",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Yle uutiset link crawler",
   "repository": {
     "type": "git",
