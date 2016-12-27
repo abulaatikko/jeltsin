@@ -10,5 +10,5 @@ Yle uutiset link crawler
 
 ## TODO
 
-* make own object/class for mongo
+* move `insertData()` behind mongoer
 * show the 1000 newest news in web page

@@ -1,48 +1,60 @@
+// dependencies
 const request = require('request')
 const cheerio = require('cheerio')
 const moment = require('moment')
 const mongo = require('mongodb')
 const promise = require('promise')
 
+// configuration
 const rootUrl = 'http://yle.fi'
 const crawledPages = ['/uutiset/18-34953']
-
 const mongoUrl = 'mongodb://localhost:27017/jeltsin'
-const mongoClient = mongo.MongoClient
 
-const openMongoConnection = function() {
-    return new Promise((resolve, reject) => {
-        mongoClient.connect(mongoUrl, (err, db) => {
-            if (err) {
-                reject(err)
-            } else {
-                resolve(db)
-            }
+// mongo helper
+const Mongoer = {
+    database: null,
+    collections: [],
+
+    init(client, url) {
+        this.client = client
+        this.url = url
+    },
+
+    open() {
+         return new Promise((resolve, reject) => {
+            this.client.connect(this.url, (err, db) => {
+                if (err) {
+                    reject(err)
+                } else {
+                    resolve(db)
+                }
+            })
         })
-    })
+    },
+
+    close() {
+        if (this.database) {
+            this.database.close()
+        }
+    },
 }
 
-const closeMongoConnection = function(db) {
-    if (db) {
-        db.close()
-    }
-}
-
-const insertAllData = function(newData) {
-    let database = null
-    let news = null
+const insertData = function(newData) {
     let insertDataCount = 0
 
-    openMongoConnection().then((db) => {
-        database = db
-        news = db.collection('news')
+    const mongoer = Object.create(Mongoer)
+    mongoer.init(mongo.MongoClient, mongoUrl)
+
+    mongoer.open().then((db) => {
+        mongoer.database = db
+        mongoer.collections['news'] = mongoer.database.collection('news')
 
         let newUrls = []
         newData.forEach(newRow => {
             newUrls.push(newRow.url)
         })
 
-        return news.find({url: {$in: newUrls}}).toArray()
+        return mongoer.collections['news'].find({url: {$in: newUrls}}).toArray()
     }).then((existingData) => {
         let insertData = []
         newData.forEach(newRow => {
@@ -57,19 +69,22 @@ const insertAllData = function(newData) {
                 insertData.push(newRow)
             }
         })
+
         insertDataCount = insertData.length
         if (insertDataCount > 0) {
-            return news.insertMany(insertData)
+            return mongoer.collections['news'].insertMany(insertData)
         }
+
         return new Promise((resolve) => resolve())
     }).then((res) => {
-        closeMongoConnection(database)
+        mongoer.close()
         console.log(insertDataCount)
     }).catch((err) => {
         console.error(err)
     })
 }
 
+// app
 crawledPages.forEach(crawledPage => {
     request(rootUrl + crawledPage, function (error, response, body) {
         if (error || response.statusCode != 200) {
@@ -90,6 +105,6 @@ crawledPages.forEach(crawledPage => {
             })
         })
 
-        insertAllData(data)
+        insertData(data)
     })
 })
