@@ -1,15 +1,15 @@
-# jeltsin
+# JELTSIN
+
 Yle uutiset link crawler
 
-# USAGE
+## USAGE
 
 1. sudo service mongodb start
 1. node crawler.js
 1. mongo jeltsin
 
-# TODO
+## TODO
 
 * make own object/class for mongo
 * cronjob
 * show the 1000 newest news in web page
-* support other categories (talous)

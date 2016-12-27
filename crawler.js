@@ -4,8 +4,8 @@ const moment = require('moment')
 const mongo = require('mongodb')
 const promise = require('promise')
 
-const yleUlkomaatUrl = 'http://yle.fi/uutiset/18-34953'
 const rootUrl = 'http://yle.fi'
+const crawledPages = ['/uutiset/18-34953']
 
 const mongoUrl = 'mongodb://localhost:27017/jeltsin'
 const mongoClient = mongo.MongoClient
@@ -70,24 +70,26 @@ const insertAllData = function(newData) {
     })
 }
 
-request(yleUlkomaatUrl, function (error, response, body) {
-    if (error || response.statusCode != 200) {
-        console.log(error)
-    }
+crawledPages.forEach(crawledPage => {
+    request(rootUrl + crawledPage, function (error, response, body) {
+        if (error || response.statusCode != 200) {
+            console.log(error)
+        }
 
-    const $ = cheerio.load(body)
-    let data = []
-    $('section.yle__newsList__sectionList__section').find('article').each((index, elem) => {
-        const newsUrl = $(elem).find('a').attr('href')
-        const title = $(elem).find('h1').text()
-        const newsAddedRaw = $(elem).find('time').attr('datetime')
-        data.push({
-            url: rootUrl + newsUrl,
-            title: title,
-            added: moment(newsAddedRaw).toISOString(),
-            created: moment().toISOString(),
+        const $ = cheerio.load(body)
+        let data = []
+        $('section.yle__newsList__sectionList__section').find('article').each((index, elem) => {
+            const newsUrl = $(elem).find('a').attr('href')
+            const title = $(elem).find('h1').text()
+            const newsAddedRaw = $(elem).find('time').attr('datetime')
+            data.push({
+                url: rootUrl + newsUrl,
+                title: title,
+                added: moment(newsAddedRaw).toISOString(),
+                created: moment().toISOString(),
+            })
         })
-    })
 
-    insertAllData(data)
+        insertAllData(data)
+    })
 })
