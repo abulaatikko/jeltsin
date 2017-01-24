@@ -10,5 +10,8 @@ Yle uutiset link crawler
 
 ## TODO
 
-* move `insertData()` behind mongoer
-* show the 1000 newest news in web page
+* import React from 'react'
+* use http://yle.fi/uutiset/rss
+* move `insertData()` behind mongoer and use update, upsert
+* show the 1000 newest news in web page (preact?)
+

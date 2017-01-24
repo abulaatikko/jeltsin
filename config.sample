@@ -1,0 +1,6 @@
+let config = {}
+config.rootUrl = 'http://yle.fi'
+config.crawledPages = ['/uutiset/18-34953']
+config.mongoUrl = 'mongodb://localhost:27017/jeltsin'
+
+module.exports = config

@@ -21,7 +21,7 @@ const Mongoer = {
     },
 
     open() {
-         return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             this.client.connect(this.url, (err, db) => {
                 if (err) {
                     reject(err)
