@@ -1,12 +1,19 @@
 # JELTSIN
 
-Yle uutiset link crawler
+Yle uutiset link crawler and API
 
-## USAGE
+## CRAWLER USAGE
 
-1. sudo service mongodb start
-1. node crawler.js
-1. mongo jeltsin
+1. `sudo service mongodb start`
+1. `node crawler.js`
+1. `mongo jeltsin`
+
+## API USAGE
+
+1. `pm2 start api.js --name "jeltsin-api"`
+1. `curl localhost:8765/api`
+
+## TIPS
 
 Fetch items between two dates:
 

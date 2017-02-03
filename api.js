@@ -12,22 +12,21 @@ const mongoHelper = require('./mongoHelper')
 const mongoer = Object.create(mongoHelper)
 mongoer.init(mongo.MongoClient, config.mongoUrl)
 
-// todo:
-// default config
-// ohjeisiin pm2 start api.js --name "jeltsin-api"
-
+// create api
 var server = restify.createServer()
 server.use(restify.acceptParser(server.acceptable))
 server.use(restify.queryParser())
 server.use(restify.bodyParser())
  
 server.get('/api', function (req, res, next) {
-    mongoer.open().then((db) => {console.log(db)
-        //res.send(db['news'].find({}).toString())
+    mongoer.open().then((db) => {
+        return db.collection('news').find({}).toArray()
+    }).then((news) => {
+        res.send(news)
         return next()
-    })
+    }).catch((error) => console.err(error))
 });
- 
-server.listen(8088, function () {
-      console.log('%s listening at %s', server.name, server.url);
+
+server.listen(8765, function () {
+    console.log('%s listening at %s', server.name, server.url);
 });
