@@ -2,6 +2,11 @@
 
 Yle uutiset link crawler and API
 
+## INSTALLATION
+
+1. `git clone https://github.com/lassiheikkinen/jeltsin`
+1. `cp config.sample config; vim config`
+
 ## CRAWLER USAGE
 
 1. `sudo service mongodb start`
@@ -25,6 +30,5 @@ db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00
 
 * import React from 'react'
 * use http://yle.fi/uutiset/rss
-* move `insertData()` behind mongoer and use update, upsert
 * show the 1000 newest news in web page (preact?)
 

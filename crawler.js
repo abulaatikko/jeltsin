@@ -14,31 +14,16 @@ const mongoer = Object.create(mongoHelper)
 mongoer.init(mongo.MongoClient, config.mongoUrl)
 
 const insertData = function(newData) {
+    const newUrls = newData.map(newRow => newRow.url)
     let insertDataCount = 0
 
     mongoer.open().then((db) => {
         mongoer.database = db
 
-        let newUrls = []
-        newData.forEach(newRow => {
-            newUrls.push(newRow.url)
-        })
-
         return mongoer.database.collection('news').find({url: {$in: newUrls}}).toArray()
     }).then((existingData) => {
-        let insertData = []
-        newData.forEach(newRow => {
-            let found = false
-            existingData.forEach(existingRow => {
-                if (existingRow.url === newRow.url) {
-                    found = true
-                }
-            })
-
-            if (!found) {
-                insertData.push(newRow)
-            }
-        })
+        const existingUrls = existingData.map(existingRow => existingRow.url)
+        const insertData = newData.filter(newRow => !existingUrls.includes(newRow.url))
 
         insertDataCount = insertData.length
         if (insertDataCount > 0) {
