@@ -1,6 +1,5 @@
 const mongoHelper = {
     database: null,
-    collections: [],
 
     init(client, url) {
         this.client = client

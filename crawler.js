@@ -6,55 +6,25 @@ const mongo = require('mongodb')
 const promise = require('promise')
 
 // configuration
-const rootUrl = 'http://yle.fi'
-const crawledPages = ['/uutiset/18-34953']
-const mongoUrl = 'mongodb://localhost:27017/jeltsin'
+const config = require('./config')
 
-// mongo helper
-const Mongoer = {
-    database: null,
-    collections: [],
-
-    init(client, url) {
-        this.client = client
-        this.url = url
-    },
-
-    open() {
-        return new Promise((resolve, reject) => {
-            this.client.connect(this.url, (err, db) => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve(db)
-                }
-            })
-        })
-    },
-
-    close() {
-        if (this.database) {
-            this.database.close()
-        }
-    },
-}
+// custom mongo helper
+const mongoHelper = require('./mongoHelper')
+const mongoer = Object.create(mongoHelper)
+mongoer.init(mongo.MongoClient, config.mongoUrl)
 
 const insertData = function(newData) {
     let insertDataCount = 0
 
-    const mongoer = Object.create(Mongoer)
-    mongoer.init(mongo.MongoClient, mongoUrl)
-
     mongoer.open().then((db) => {
         mongoer.database = db
-        mongoer.collections['news'] = mongoer.database.collection('news')
 
         let newUrls = []
         newData.forEach(newRow => {
             newUrls.push(newRow.url)
         })
 
-        return mongoer.collections['news'].find({url: {$in: newUrls}}).toArray()
+        return mongoer.database.collection('news').find({url: {$in: newUrls}}).toArray()
     }).then((existingData) => {
         let insertData = []
         newData.forEach(newRow => {
@@ -72,7 +42,7 @@ const insertData = function(newData) {
 
         insertDataCount = insertData.length
         if (insertDataCount > 0) {
-            return mongoer.collections['news'].insertMany(insertData)
+            return mongoer.database.collection('news').insertMany(insertData)
         }
 
         return new Promise((resolve) => resolve())
@@ -85,8 +55,8 @@ const insertData = function(newData) {
 }
 
 // app
-crawledPages.forEach(crawledPage => {
-    request(rootUrl + crawledPage, function (error, response, body) {
+config.crawledPages.forEach(crawledPage => {
+    request(config.rootUrl + crawledPage, function (error, response, body) {
         if (error || response.statusCode != 200) {
             console.log(error)
         }
@@ -98,7 +68,7 @@ crawledPages.forEach(crawledPage => {
             const title = $(elem).find('h1').text()
             const newsAddedRaw = $(elem).find('time').attr('datetime')
             data.push({
-                url: rootUrl + newsUrl,
+                url: config.rootUrl + newsUrl,
                 title: title,
                 added: moment(newsAddedRaw).toISOString(),
                 created: moment().toISOString(),

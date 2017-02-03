@@ -20,11 +20,15 @@ server.use(restify.bodyParser())
  
 server.get('/api', function (req, res, next) {
     mongoer.open().then((db) => {
-        return db.collection('news').find({}).toArray()
+        mongoer.database = db
+
+        return mongoer.database.collection('news').find({}).toArray()
     }).then((news) => {
         res.send(news)
+        mongoer.close()
+
         return next()
-    }).catch((error) => console.err(error))
+    }).catch((error) => console.error(error))
 });
 
 server.listen(8765, function () {
