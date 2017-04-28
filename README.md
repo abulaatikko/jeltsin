@@ -4,7 +4,8 @@ Yle uutiset link crawler and API
 
 ## INSTALLATION
 
-1. `git clone https://github.com/lassiheikkinen/jeltsin`
+1. `git clone https://github.com/lassiheikkinen/jeltsin`; cd jeltsin
+1. `yarn`
 1. `cp config.sample config; vim config`
 
 ## CRAWLER USAGE
@@ -31,4 +32,5 @@ db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00
 * show the 1000 newest news in web page (react, preact, vue?)
 * request a key to make the app remember your last opened link
 * use http://yle.fi/uutiset/rss
+* https://www.npmjs.com/package/node-fetch
 
