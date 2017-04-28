@@ -18,6 +18,7 @@ Yle uutiset link crawler and API
 
 1. `pm2 start api.js --name "jeltsin-api"`
 1. `curl localhost:8765/api`
+1. <http://jeltsin.pulu.org/api>
 
 ## TIPS
 
@@ -31,6 +32,7 @@ db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00
 
 * show the 1000 newest news in web page (react, preact, vue?)
 * request a key to make the app remember your last opened link
-* use http://yle.fi/uutiset/rss
-* https://www.npmjs.com/package/node-fetch
+* use hapi
+* use <http://yle.fi/uutiset/rss>
+* <https://www.npmjs.com/package/node-fetch>
 

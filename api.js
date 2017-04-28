@@ -13,7 +13,7 @@ const mongoer = Object.create(mongoHelper)
 mongoer.init(mongo.MongoClient, config.mongoUrl)
 
 // create api
-var server = restify.createServer()
+const server = restify.createServer()
 server.use(restify.acceptParser(server.acceptable))
 server.use(restify.queryParser())
 server.use(restify.bodyParser())
@@ -31,6 +31,10 @@ server.get('/api', function (req, res, next) {
     }).catch((error) => console.error(error))
 });
 
+server.get('/', function(req, res, next) {
+    res.send('index.html')
+})
+
 server.listen(8765, function () {
-    console.log('%s listening at %s', server.name, server.url);
-});
+    console.log('%s listening at %s', server.name, server.url)
+})
