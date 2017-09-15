@@ -3,6 +3,7 @@ const restify = require('restify')
 const request = require('request')
 const mongo = require('mongodb')
 const promise = require('promise')
+const fs = require('fs')
 
 // configuration
 const config = require('./config')
@@ -32,8 +33,12 @@ server.get('/api', function (req, res, next) {
 });
 
 server.get('/', function(req, res, next) {
-    res.send('index.html')
+    res.end(fs.readFileSync('./web/index.html', 'utf8'))
 })
+
+server.get(/\/web\/?.*/, restify.serveStatic({
+    directory: __dirname,
+}))
 
 server.listen(8765, function () {
     console.log('%s listening at %s', server.name, server.url)

@@ -20,6 +20,11 @@ Yle uutiset link crawler and API
 1. `curl localhost:8765/api`
 1. <http://jeltsin.pulu.org/api>
 
+## Front
+
+1. npm run build
+1. <http://jeltsin.pulu.org/>
+
 ## TIPS
 
 Fetch items between two dates:
@@ -30,8 +35,8 @@ db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00
 
 ## TODO
 
-* show the 1000 newest news in web page (react, preact, vue?)
-    * http://www.react.express/react_setup
+* clean up directory (crawler, server, front)
+* better layout
 * pagination
 * request a key to make the app remember your last opened link
 * use hapi
