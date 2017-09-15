@@ -22,7 +22,7 @@ server.get('/api', function (req, res, next) {
     mongoer.open().then((db) => {
         mongoer.database = db
 
-        return mongoer.database.collection('news').find({}).toArray()
+        return mongoer.database.collection('news').find({}).sort({ added: -1 }).limit(1000).toArray()
     }).then((news) => {
         res.send(news)
         mongoer.close()

@@ -31,6 +31,8 @@ db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00
 ## TODO
 
 * show the 1000 newest news in web page (react, preact, vue?)
+    * http://www.react.express/react_setup
+* pagination
 * request a key to make the app remember your last opened link
 * use hapi
 * use <http://yle.fi/uutiset/rss>
