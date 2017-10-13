@@ -35,7 +35,6 @@ db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00
 
 ## TODO
 
-* better layout
 * pagination
 * request a key to make the app remember your last opened link
 * use hapi
