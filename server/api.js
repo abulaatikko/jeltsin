@@ -21,7 +21,7 @@ server.use(restify.bodyParser())
 
 server.get('/api', function (req, res, next) {
     const page = req.params.page || 1
-    const count = 1000
+    const count = 100
     const skip = (page - 1) * count
 
     mongoer.open().then((db) => {

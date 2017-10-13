@@ -35,10 +35,10 @@ db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00
 
 ## TODO
 
-* pagination
 * request a key to make the app remember your last opened link
-* use hapi
 * use npm5 instead of yarn
+* use react-router for pagination and update url
+* use hapi
 * use <http://yle.fi/uutiset/rss>
 * <https://www.npmjs.com/package/node-fetch>
 
