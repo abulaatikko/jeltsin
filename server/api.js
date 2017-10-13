@@ -20,10 +20,14 @@ server.use(restify.queryParser())
 server.use(restify.bodyParser())
 
 server.get('/api', function (req, res, next) {
+    const page = req.params.page || 1
+    const count = 1000
+    const skip = (page - 1) * count
+
     mongoer.open().then((db) => {
         mongoer.database = db
 
-        return mongoer.database.collection('news').find({}).sort({ added: -1 }).limit(1000).toArray()
+        return mongoer.database.collection('news').find({}).sort({ added: -1 }).skip(skip).limit(count).toArray()
     }).then((news) => {
         res.send(news)
         mongoer.close()
