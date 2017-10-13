@@ -14,13 +14,13 @@ Yle uutiset link crawler and API
 1. `node crawler.js`
 1. `mongo jeltsin`
 
-## API USAGE
+## BACKEND USAGE
 
-1. `pm2 start api.js --name "jeltsin-api"`
+1. `pm2 start server/api.js --name "jeltsin-server"`
 1. `curl localhost:8765/api`
 1. <http://jeltsin.pulu.org/api>
 
-## Front
+## FRONTEND USAGE
 
 1. npm run build
 1. <http://jeltsin.pulu.org/>
@@ -30,16 +30,16 @@ Yle uutiset link crawler and API
 Fetch items between two dates:
 
 ````
-db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00:00.000Z" } }, {url: 1, title: 1, added: 1,_id: 0}).sort({added: -1});
+db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00:00.000Z" } }, { url: 1, title: 1, added: 1,_id: 0 }).sort({ added: -1 });
 ````
 
 ## TODO
 
-* clean up directory (crawler, server, front)
 * better layout
 * pagination
 * request a key to make the app remember your last opened link
 * use hapi
+* use npm5 instead of yarn
 * use <http://yle.fi/uutiset/rss>
 * <https://www.npmjs.com/package/node-fetch>
 

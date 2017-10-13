@@ -6,10 +6,10 @@ const mongo = require('mongodb')
 const promise = require('promise')
 
 // configuration
-const config = require('./config')
+const config = require('../config')
 
 // custom mongo helper
-const mongoHelper = require('./mongoHelper')
+const mongoHelper = require('../mongoHelper')
 const mongoer = Object.create(mongoHelper)
 mongoer.init(mongo.MongoClient, config.mongoUrl)
 

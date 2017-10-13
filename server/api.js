@@ -6,10 +6,10 @@ const promise = require('promise')
 const fs = require('fs')
 
 // configuration
-const config = require('./config')
+const config = require('../config')
 
 // custom mongo helper
-const mongoHelper = require('./mongoHelper')
+const mongoHelper = require('../mongoHelper')
 const mongoer = Object.create(mongoHelper)
 mongoer.init(mongo.MongoClient, config.mongoUrl)
 
@@ -18,7 +18,7 @@ const server = restify.createServer()
 server.use(restify.acceptParser(server.acceptable))
 server.use(restify.queryParser())
 server.use(restify.bodyParser())
- 
+
 server.get('/api', function (req, res, next) {
     mongoer.open().then((db) => {
         mongoer.database = db
@@ -37,7 +37,7 @@ server.get('/', function(req, res, next) {
 })
 
 server.get(/\/web\/?.*/, restify.serveStatic({
-    directory: __dirname,
+    directory: __dirname + '/../',
 }))
 
 server.listen(8765, function () {

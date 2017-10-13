@@ -1,6 +1,6 @@
 module.exports = options => {
   return {
-    entry: './front-src/index.js',
+    entry: './front/index.js',
     output: {
       filename: 'web/bundle.js',
     },
