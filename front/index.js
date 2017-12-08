@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom'
 
 import moment from 'moment'
 
-function Pagination({ page, openPreviousPage, openNextPage }) {
+function Pagination({ month, openPreviousMonth, openNextMonth }) {
+    const isCurrentMonthOpened = moment(month, 'YYYY-MM').format('YYYY-MM') === moment().format('YYYY-MM')
+
     return (
         <div className="pagination">
             <p>
-                <a className={page <= 1 ? 'disabled' : ''} onClick={openPreviousPage}>Uudempia uutisia</a>
-                 &mdash; 
-                <a onClick={openNextPage}>Vanhempia uutisia</a>
+                <a className={isCurrentMonthOpened ? 'disabled' : ''} onClick={openNextMonth}>Uudempia uutisia</a> &mdash; <a onClick={openPreviousMonth}>Vanhempia uutisia</a>
             </p>
         </div>
     )
@@ -22,31 +22,32 @@ class App extends Component {
 
         this.state = {
             news: [],
-            page: 1
+            month: moment().format('YYYY-MM')
         }
 
         this.fetchData = this.fetchData.bind(this)
-        this.openNextPage = this.openNextPage.bind(this)
-        this.openPreviousPage = this.openPreviousPage.bind(this)
+        this.openNextMonth = this.openNextMonth.bind(this)
+        this.openPreviousMonth = this.openPreviousMonth.bind(this)
     }
 
-    openNextPage() {
-        this.setState({ page: this.state.page + 1 })
+    openNextMonth() {
+        const { month } = this.state
+        const nextMonth = moment(month, 'YYYY-MM').add(1, 'months').format('YYYY-MM')
+
+        this.setState({ month: nextMonth })
     }
 
-    openPreviousPage() {
-        const { page } = this.state
+    openPreviousMonth() {
+        const { month } = this.state
+        const previousMonth = moment(month, 'YYYY-MM').subtract(1, 'months').format('YYYY-MM')
 
-        if (page <= 1) {
-            return false
-        }
-
-        this.setState({ page: page - 1 })
+        this.setState({ month: previousMonth })
     }
 
     fetchData() {
-        const page = this.state.page
-        fetch('/api?page=' + page)
+        const { month } = this.state
+
+        fetch('/api?month=' + month)
             .then(data => data.json())
             .then(json => this.setState({ news: json }))
     }
@@ -56,17 +57,17 @@ class App extends Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if (prevState.page !== this.state.page) {
+        if (prevState.month !== this.state.month) {
             this.fetchData()
         }
     }
 
     render() {
-        const { page } = this.state
+        const { month } = this.state
 
         return (
             <div>
-                <Pagination page={page} openPreviousPage={this.openPreviousPage} openNextPage={this.openNextPage} />
+                <Pagination month={month} openPreviousMonth={this.openPreviousMonth} openNextMonth={this.openNextMonth} />
                 <table>
                     <thead>
                         <tr><th>Uutinen</th><th>Julkaistu</th></tr>
@@ -80,7 +81,7 @@ class App extends Component {
                     )}
                     </tbody>
                 </table>
-                <Pagination page={page} openPreviousPage={this.openPreviousPage} openNextPage={this.openNextPage} />
+                <Pagination month={month} openPreviousMonth={this.openPreviousMonth} openNextMonth={this.openNextMonth} />
             </div>
         )
     }
