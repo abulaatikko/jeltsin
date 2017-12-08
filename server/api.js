@@ -40,13 +40,13 @@ server.get('/api', function (req, res, next) {
     }).catch((error) => console.error(error))
 });
 
-server.get('/', function(req, res, next) {
-    res.end(fs.readFileSync('./web/index.html', 'utf8'))
-})
-
 server.get(/\/web\/?.*/, restify.serveStatic({
     directory: __dirname + '/../',
 }))
+
+server.get('/.*', function(req, res, next) {
+    res.end(fs.readFileSync('./web/index.html', 'utf8'))
+})
 
 server.listen(8765, function () {
     console.log('%s listening at %s', server.name, server.url)

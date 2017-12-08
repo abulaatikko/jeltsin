@@ -1,51 +1,42 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter as Router, Route, Redirect, Link } from 'react-router-dom'
 
 import moment from 'moment'
 
-function Pagination({ month, openPreviousMonth, openNextMonth }) {
+function Pagination({ match }) {
+    const { month } = match.params
+
     const isCurrentMonthOpened = moment(month, 'YYYY-MM').format('YYYY-MM') === moment().format('YYYY-MM')
+    const nextMonth = moment(month, 'YYYY-MM').add(1, 'months').format('YYYY-MM')
+    const previousMonth = moment(month, 'YYYY-MM').subtract(1, 'months').format('YYYY-MM')
 
     return (
         <div className="pagination">
             <p>
-                <a className={isCurrentMonthOpened ? 'disabled' : ''} onClick={openNextMonth}>Uudempia uutisia</a> &mdash; <a onClick={openPreviousMonth}>Vanhempia uutisia</a>
+                {!isCurrentMonthOpened
+                    ? <Link to={`/month/${nextMonth}`}>Uudempia uutisia</Link>
+                    : <span>Uudempia uutisia</span>
+                }
+                &nbsp;&mdash;&nbsp;
+                <Link to={`/month/${previousMonth}`}>Vanhempia uutisia</Link>
             </p>
         </div>
     )
 }
 
-class App extends Component {
+class NewsList extends Component {
 
     constructor() {
         super()
 
         this.state = {
             news: [],
-            month: moment().format('YYYY-MM')
         }
-
-        this.fetchData = this.fetchData.bind(this)
-        this.openNextMonth = this.openNextMonth.bind(this)
-        this.openPreviousMonth = this.openPreviousMonth.bind(this)
-    }
-
-    openNextMonth() {
-        const { month } = this.state
-        const nextMonth = moment(month, 'YYYY-MM').add(1, 'months').format('YYYY-MM')
-
-        this.setState({ month: nextMonth })
-    }
-
-    openPreviousMonth() {
-        const { month } = this.state
-        const previousMonth = moment(month, 'YYYY-MM').subtract(1, 'months').format('YYYY-MM')
-
-        this.setState({ month: previousMonth })
     }
 
     fetchData() {
-        const { month } = this.state
+        const { month } = this.props.match.params
 
         fetch('/api?month=' + month)
             .then(data => data.json())
@@ -56,18 +47,18 @@ class App extends Component {
         this.fetchData()
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if (prevState.month !== this.state.month) {
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location) {
             this.fetchData()
         }
     }
 
     render() {
-        const { month } = this.state
+        const props = this.props
 
         return (
             <div>
-                <Pagination month={month} openPreviousMonth={this.openPreviousMonth} openNextMonth={this.openNextMonth} />
+                <Pagination {...props} />
                 <table>
                     <thead>
                         <tr><th>Uutinen</th><th>Julkaistu</th></tr>
@@ -81,12 +72,26 @@ class App extends Component {
                     )}
                     </tbody>
                 </table>
-                <Pagination month={month} openPreviousMonth={this.openPreviousMonth} openNextMonth={this.openNextMonth} />
+                <Pagination {...props} />
+            </div>
+        )
+    }
+}
+
+class App extends Component {
+
+    render() {
+        return (
+            <div>
+                <Route path="/month/:month" component={NewsList} />
+                <Route exact path="/" render={() => (
+                    <Redirect to={`/month/${moment().format('YYYY-MM')}`} />
+                )} />
             </div>
         )
     }
 }
 
 const root = document.querySelector('#root')
-ReactDOM.render(<App />, root)
+ReactDOM.render(<Router><App /></Router>, root)
 
