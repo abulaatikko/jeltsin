@@ -3,6 +3,7 @@ const restify = require('restify')
 const request = require('request')
 const mongo = require('mongodb')
 const promise = require('promise')
+const moment = require('moment')
 const fs = require('fs')
 
 // configuration
@@ -20,14 +21,17 @@ server.use(restify.queryParser())
 server.use(restify.bodyParser())
 
 server.get('/api', function (req, res, next) {
-    const page = req.params.page || 1
-    const count = 100
-    const skip = (page - 1) * count
+    const month = req.params.month || moment().year() + '-' + moment().month()
 
     mongoer.open().then((db) => {
         mongoer.database = db
 
-        return mongoer.database.collection('news').find({}).sort({ added: -1 }).skip(skip).limit(count).toArray()
+        return mongoer.database.collection('news').find({
+            added: {
+                '$gte': moment(month + '-01').format(),
+                '$lt': moment(month + '-' + moment(month).daysInMonth()).format()
+            }
+        }).sort({ added: -1 }).toArray()
     }).then((news) => {
         res.send(news)
         mongoer.close()

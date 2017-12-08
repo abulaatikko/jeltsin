@@ -30,11 +30,12 @@ Yle uutiset link crawler and API
 Fetch items between two dates:
 
 ````
-db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00:00.000Z" } }, { url: 1, title: 1, added: 1,_id: 0 }).sort({ added: -1 });
+db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00:00.000Z" } }, { url: 1, title: 1, added: 1, _id: 0 }).sort({ added: -1 });
 ````
 
 ## TODO
 
+* show one month per page?
 * request a key to make the app remember your last opened link
 * use npm5 instead of yarn
 * use react-router for pagination and update url
