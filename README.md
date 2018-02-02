@@ -35,8 +35,7 @@ db.news.find({ added: { $gte: "2016-09-01T00:00:00.000Z", $lt: "2017-01-01T00:00
 
 ## TODO
 
-* use npm5 instead of yarn
-* use hapi
-* use <http://yle.fi/uutiset/rss>
-* <https://www.npmjs.com/package/node-fetch>
+* NICE-TO-HAVE: use npm5 instead of yarn when it becomes available via os updates. dont break whats working
+* NICE-TO-HAVE: use <http://yle.fi/uutiset/rss>
+* NICE-TO-HAVE: <https://www.npmjs.com/package/node-fetch>
 
