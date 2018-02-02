@@ -2,6 +2,13 @@
 
 Yle uutiset link crawler and API
 
+## REQUIREMENTS
+
+* mongodb
+* node
+* npm
+* pm2
+
 ## INSTALLATION
 
 1. `git clone https://github.com/lassiheikkinen/jeltsin`; cd jeltsin
@@ -14,7 +21,7 @@ Yle uutiset link crawler and API
 1. `node crawler.js`
 1. `mongo jeltsin`
 
-## BACKEND USAGE
+## SERVER USAGE
 
 1. `pm2 start server/api.js --name "jeltsin-server"`
 1. `curl localhost:8765/api`
