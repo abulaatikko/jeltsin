@@ -11,7 +11,7 @@ Yle uutiset link crawler and API
 
 ## INSTALLATION
 
-1. `git clone https://github.com/lassiheikkinen/jeltsin`; cd jeltsin
+1. `git clone https://github.com/abulaatikko/jeltsin`; cd jeltsin
 1. `yarn`
 1. `cp config.sample config; vim config`
 
